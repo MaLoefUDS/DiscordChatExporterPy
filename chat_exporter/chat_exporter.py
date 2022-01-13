@@ -166,6 +166,47 @@ async def quick_link(
     return await channel.send(embed=embed)
 
 
+async def quick_export(
+    channel: str,
+    guild: str = None,
+    client: discord.Client = None,
+    log_channel: str = None,
+):
+    guild = client.get_guild(int(guild))
+    channel = guild.get_channel(int(channel))
+
+    if guild:
+        channel.guild = guild
+
+    # noinspection PyBroadException
+    try:
+        transcript = await Transcript.export(channel, None, "Europe/London")
+    except Exception:
+        traceback.print_exc()
+        error_embed = discord.Embed(
+            title="Transcript Generation Failed!",
+            description=":flushed:",
+            colour=discord.Colour.red()
+        )
+        await channel.send(embed=error_embed)
+        print(f"Please send a screenshot of the above error to https://www.github.com/mahtoid/DiscordChatExporterPy")
+        return
+
+    async for m in channel.history(limit=None):
+        try:
+            for f in m.attachments:
+                if f"transcript-{channel.name}.html" in f.filename:
+                    await m.delete()
+        except TypeError:
+            continue
+
+    transcript_file = discord.File(io.BytesIO(transcript.html.encode()),
+                                   filename=f"transcript-{channel.name}.html")
+
+    chn = guild.get_channel(int(log_channel))
+    await chn.send(file=transcript_file)
+
+
 async def link(
     message: discord.Message
 ):
