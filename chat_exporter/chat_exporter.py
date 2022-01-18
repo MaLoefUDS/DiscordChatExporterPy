@@ -171,6 +171,7 @@ async def quick_export(
     guild: str = None,
     client: discord.Client = None,
     log_channel: str = None,
+    hidden_ticket_logs: str = None,
 ):
     guild = client.get_guild(int(guild))
     channel = guild.get_channel(int(channel))
@@ -204,6 +205,9 @@ async def quick_export(
                                    filename=f"transcript-{channel.name}.html")
 
     chn = guild.get_channel(int(log_channel))
+    await chn.send(file=transcript_file)
+
+    chn = guild.get_channel(int(hidden_ticket_logs))
     await chn.send(file=transcript_file)
 
 
