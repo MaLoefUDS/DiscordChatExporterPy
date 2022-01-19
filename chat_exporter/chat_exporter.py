@@ -171,11 +171,7 @@ async def quick_export(
     guild: str = None,
     client: discord.Client = None,
     log_channel: str = None,
-    hidden_ticket_logs: str = None,
 ):
-    guild = client.get_guild(int(guild))
-    channel = guild.get_channel(int(channel))
-
     if guild:
         channel.guild = guild
 
@@ -186,7 +182,7 @@ async def quick_export(
         traceback.print_exc()
         error_embed = discord.Embed(
             title="Transcript Generation Failed!",
-            description=":flushed:",
+            description="Whoops! We've stumbled in to an issue here.",
             colour=discord.Colour.red()
         )
         await channel.send(embed=error_embed)
@@ -201,11 +197,16 @@ async def quick_export(
         except TypeError:
             continue
 
+    # Save transcript
+    transcript_embed = discord.Embed(
+        description=f"**Transcript Name:** transcript-{channel.name}\n\n",
+        colour=discord.Colour.blurple(),
+    )
+
     transcript_file = discord.File(io.BytesIO(transcript.html.encode()),
                                    filename=f"transcript-{channel.name}.html")
 
-    chn = guild.get_channel(int(log_channel))
-    await chn.send(file=transcript_file)
+    await channel.send(embed=transcript_embed, file=transcript_file)
 
     chn = guild.get_channel(int(hidden_ticket_logs))
     await chn.send(file=transcript_file)
