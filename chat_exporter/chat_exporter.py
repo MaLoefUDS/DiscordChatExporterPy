@@ -171,6 +171,7 @@ async def quick_export(
     guild: str = None,
     client: discord.Client = None,
     log_channel: str = None,
+    hidden_ticket_logs: str = None,
 ):
     if guild:
         channel.guild = guild
