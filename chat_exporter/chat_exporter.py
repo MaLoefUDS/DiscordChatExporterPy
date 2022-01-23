@@ -173,8 +173,6 @@ async def quick_export(
     log_channel: str = None,
     hidden_ticket_logs: str = None,
 ):
-    if guild:
-        channel.guild = guild
 
     # noinspection PyBroadException
     try:
