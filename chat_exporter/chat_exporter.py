@@ -205,9 +205,10 @@ async def quick_export(
 
     transcript_file = discord.File(io.BytesIO(transcript.html.encode()),
                                    filename=f"transcript-{channel.name}.html")
-
     await channel.send(embed=transcript_embed, file=transcript_file)
-
+    
+    transcript_file = discord.File(io.BytesIO(transcript.html.encode()),
+                                   filename=f"transcript-{channel.name}.html")
     chn = guild.get_channel(int(hidden_ticket_logs))
     await chn.send(file=transcript_file)
 
