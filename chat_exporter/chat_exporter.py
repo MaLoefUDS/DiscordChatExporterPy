@@ -173,7 +173,7 @@ async def quick_export(
     log_channel: str = None,
     hidden_ticket_logs: str = None,
 ):
-    guild = client.get_guild(guild)
+    guild = client.get_guild(int(guild))
     channel = guild.get_channel(int(channel))
     log_channel = guild.get_channel(int(log_channel))
     hidden_channel = guild.get_channel(int(hidden_ticket_logs))
@@ -200,15 +200,9 @@ async def quick_export(
         except TypeError:
             continue
 
-    # Save transcript
-    transcript_embed = discord.Embed(
-        description=f"**Transcript Name:** transcript-{channel.name}\n\n",
-        colour=discord.Colour.blurple(),
-    )
-
     transcript_file = discord.File(io.BytesIO(transcript.html.encode()),
                                    filename=f"transcript-{channel.name}.html")
-    await log_channel.send(embed=transcript_embed, file=transcript_file)
+    await log_channel.send(file=transcript_file)
     transcript_file = discord.File(io.BytesIO(transcript.html.encode()),
                                    filename=f"transcript-{channel.name}.html")
     await hidden_channel.send(file=transcript_file)
