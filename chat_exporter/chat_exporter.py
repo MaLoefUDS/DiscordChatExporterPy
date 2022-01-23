@@ -169,6 +169,7 @@ async def quick_link(
 async def quick_export(
     channel: str,
     guild: str = None,
+    ticket_id: str = None,
     client: discord.Client = None,
     log_channel: str = None,
     hidden_ticket_logs: str = None,
@@ -201,10 +202,10 @@ async def quick_export(
             continue
 
     transcript_file = discord.File(io.BytesIO(transcript.html.encode()),
-                                   filename=f"transcript-{channel.name}.html")
+                                   filename=f"transcript-{channel.name}---{ticket_id}---.html")
     await log_channel.send(file=transcript_file)
     transcript_file = discord.File(io.BytesIO(transcript.html.encode()),
-                                   filename=f"transcript-{channel.name}.html")
+                                   filename=f"transcript-{channel.name}---{ticket_id}---.html")
     await hidden_channel.send(file=transcript_file)
 
 
