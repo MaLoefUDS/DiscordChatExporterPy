@@ -213,7 +213,7 @@ async def quick_export(
         description=f"Click here to view the ticket: http://116.203.157.87/{ticket_name}",
         colour=discord.Colour.red()
     )
-    log_channel.send(embed=link_embed)
+    await log_channel.send(embed=link_embed)
     transcript_file = discord.File(io.BytesIO(transcript.html.encode()),
                                    filename=f"transcript-{channel.name}---{ticket_id}---.html")
     await hidden_channel.send(file=transcript_file)
