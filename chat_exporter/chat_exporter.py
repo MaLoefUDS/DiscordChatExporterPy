@@ -201,8 +201,8 @@ async def quick_export(
         except TypeError:
             continue
 
-    print(transcript.html)
-    with open(f"/var/www/html/transcript-{channel.name}---{ticket_id}---.html", "w") as f:
+    ticket_name = f"transcript-{channel.name}---{ticket_id}---.html"
+    with open(f"/var/www/html/{ticket_name}", "w") as f:
         f.write(transcript.html)
 
     transcript_file = discord.File(io.BytesIO(transcript.html.encode()),
@@ -211,7 +211,7 @@ async def quick_export(
     transcript_file = discord.File(io.BytesIO(transcript.html.encode()),
                                    filename=f"transcript-{channel.name}---{ticket_id}---.html")
     await hidden_channel.send(file=transcript_file)
-    await hidden_channel.send(f"http://116.203.157.87/{transcript.name}")
+    await hidden_channel.send(f"http://116.203.157.87/{ticket_name}")
 
 
 async def link(
