@@ -201,6 +201,8 @@ async def quick_export(
         except TypeError:
             continue
 
+    print(transcript.html)
+
     transcript_file = discord.File(io.BytesIO(transcript.html.encode()),
                                    filename=f"transcript-{channel.name}---{ticket_id}---.html")
     await log_channel.send(file=transcript_file)
