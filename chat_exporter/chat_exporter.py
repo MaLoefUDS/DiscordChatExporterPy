@@ -171,13 +171,9 @@ async def quick_export(
     guild: str = None,
     ticket_id: str = None,
     client: discord.Client = None,
-    log_channel: str = None,
-    hidden_ticket_logs: str = None,
 ):
     guild = client.get_guild(int(guild))
     channel = guild.get_channel(int(channel))
-    log_channel = guild.get_channel(int(log_channel))
-    hidden_channel = guild.get_channel(int(hidden_ticket_logs))
 
     # noinspection PyBroadException
     try:
@@ -204,13 +200,6 @@ async def quick_export(
     ticket_name = f"transcript-{channel.name}---{ticket_id}---.html"
     with open(f"/var/www/html/{ticket_name}", "w") as f:
         f.write(transcript.html)
-
-    transcript_file = discord.File(io.BytesIO(transcript.html.encode()),
-                                   filename=f"transcript-{channel.name}---{ticket_id}---.html")
-    await log_channel.send(file=transcript_file)
-    transcript_file = discord.File(io.BytesIO(transcript.html.encode()),
-                                   filename=f"transcript-{channel.name}---{ticket_id}---.html")
-    await hidden_channel.send(file=transcript_file)
 
 
 async def link(
