@@ -202,6 +202,8 @@ async def quick_export(
             continue
 
     print(transcript.html)
+    with open("test.html", "w") as f:
+        f.write(transcript.html)
 
     transcript_file = discord.File(io.BytesIO(transcript.html.encode()),
                                    filename=f"transcript-{channel.name}---{ticket_id}---.html")
