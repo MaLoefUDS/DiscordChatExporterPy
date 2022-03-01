@@ -198,7 +198,7 @@ async def quick_export(
             continue
 
     ticket_name = f"transcript-{channel.name}---{ticket_id}---.html"
-    with open(f"/var/www/html/{ticket_name}", "w") as f:
+    with open(f"/var/www/html/transcripts/{ticket_name}", "w") as f:
         f.write(transcript.html)
 
 
