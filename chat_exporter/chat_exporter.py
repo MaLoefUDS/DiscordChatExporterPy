@@ -1,5 +1,6 @@
 import datetime
 import io
+import traceback
 from typing import List, Optional
 
 from chat_exporter.construct.transcript import Transcript
@@ -201,6 +202,40 @@ async def quick_export(
     with open(f"/var/www/html/transcripts/{ticket_name}", "w") as f:
         f.write(transcript.html)
 
+async def quick_export(
+    channel: str,
+    guild: str = None,
+    ticket_id: str = None,
+    client: discord.Client = None,
+):
+    guild = client.get_guild(int(guild))
+    channel = guild.get_channel(int(channel))
+
+    # noinspection PyBroadException
+    try:
+        transcript = await export(channel=channel, limit=10000, guild=guild)
+    except Exception:
+        traceback.print_exc()
+        error_embed = discord.Embed(
+            title="Transcript Generation Failed!",
+            description="Whoops! We've stumbled in to an issue here.",
+            colour=discord.Colour.red()
+        )
+        await channel.send(embed=error_embed)
+        print(f"Please send a screenshot of the above error to https://www.github.com/mahtoid/DiscordChatExporterPy")
+        return
+
+    async for m in channel.history(limit=None):
+        try:
+            for f in m.attachments:
+                if f"transcript-{channel.name}.html" in f.filename:
+                    await m.delete()
+        except TypeError:
+            continue
+
+    ticket_name = f"transcript-{channel.name}---{ticket_id}---.html"
+    with open(f"/var/www/html/transcripts/{ticket_name}", "w") as f:
+        f.write(transcript)
 
 async def link(
     message: discord.Message
